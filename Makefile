@@ -30,3 +30,7 @@ up:
 
 stop:
 	docker compose stop
+
+unit:
+	go test -v ./...
+
