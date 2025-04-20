@@ -13,9 +13,9 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-// Tech Metrics
+// Метрики
 
-// requestCount - request counter with Vecotor3: handler, method, code.
+// requestCount - количество запросов
 var requestCount = promauto.NewCounterVec(
 	prometheus.CounterOpts{
 		Name: "http.requests.total",
@@ -34,7 +34,7 @@ var responseTime = promauto.NewHistogramVec(
 	[]string{"handler", "method"},
 )
 
-// Business Metrics
+// Бизнес метрики
 
 // createPVZCount - counter of created PVZs.
 var createPvzCount = promauto.NewCounter(

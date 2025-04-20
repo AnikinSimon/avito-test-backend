@@ -34,3 +34,9 @@ stop:
 unit:
 	go test -v ./...
 
+.PHONY: test
+
+test:
+	go test -v -tags=integrations -count=1 ./...
+
+
