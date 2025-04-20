@@ -15,7 +15,7 @@ import (
 
 // Метрики
 
-// requestCount - количество запросов
+// requestCount - количество запросов.
 var requestCount = promauto.NewCounterVec(
 	prometheus.CounterOpts{
 		Name: "http.requests.total",
