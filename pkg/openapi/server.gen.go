@@ -18,6 +18,7 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gin-gonic/gin"
+	uuid "github.com/google/uuid"
 	"github.com/oapi-codegen/runtime"
 	strictgin "github.com/oapi-codegen/runtime/strictmiddleware/gin"
 	openapi_types "github.com/oapi-codegen/runtime/types"
@@ -79,9 +80,9 @@ type Error struct {
 
 // PVZ defines model for PVZ.
 type PVZ struct {
-	City             PVZCity             `json:"city"`
-	Id               *openapi_types.UUID `json:"id,omitempty"`
-	RegistrationDate *time.Time          `json:"registrationDate,omitempty"`
+	City             PVZCity    `json:"city"`
+	Id               *uuid.UUID `json:"id,omitempty"`
+	RegistrationDate *time.Time `json:"registrationDate,omitempty"`
 }
 
 // PVZCity defines model for PVZ.City.
@@ -89,10 +90,10 @@ type PVZCity string
 
 // Product defines model for Product.
 type Product struct {
-	DateTime    *time.Time          `json:"dateTime,omitempty"`
-	Id          *openapi_types.UUID `json:"id,omitempty"`
-	ReceptionId openapi_types.UUID  `json:"receptionId"`
-	Type        ProductType         `json:"type"`
+	DateTime    *time.Time  `json:"dateTime,omitempty"`
+	Id          *uuid.UUID  `json:"id,omitempty"`
+	ReceptionId uuid.UUID   `json:"receptionId"`
+	Type        ProductType `json:"type"`
 }
 
 // ProductType defines model for Product.Type.
@@ -100,10 +101,10 @@ type ProductType string
 
 // Reception defines model for Reception.
 type Reception struct {
-	DateTime time.Time           `json:"dateTime"`
-	Id       *openapi_types.UUID `json:"id,omitempty"`
-	PvzId    openapi_types.UUID  `json:"pvzId"`
-	Status   ReceptionStatus     `json:"status"`
+	DateTime time.Time       `json:"dateTime"`
+	Id       *uuid.UUID      `json:"id,omitempty"`
+	PvzId    uuid.UUID       `json:"pvzId"`
+	Status   ReceptionStatus `json:"status"`
 }
 
 // ReceptionStatus defines model for Reception.Status.
@@ -115,7 +116,7 @@ type Token = string
 // User defines model for User.
 type User struct {
 	Email openapi_types.Email `json:"email"`
-	Id    *openapi_types.UUID `json:"id,omitempty"`
+	Id    *uuid.UUID          `json:"id,omitempty"`
 	Role  UserRole            `json:"role"`
 }
 
@@ -138,7 +139,7 @@ type PostLoginJSONBody struct {
 
 // PostProductsJSONBody defines parameters for PostProducts.
 type PostProductsJSONBody struct {
-	PvzId openapi_types.UUID       `json:"pvzId"`
+	PvzId uuid.UUID                `json:"pvzId"`
 	Type  PostProductsJSONBodyType `json:"type"`
 }
 
@@ -162,7 +163,7 @@ type GetPvzParams struct {
 
 // PostReceptionsJSONBody defines parameters for PostReceptions.
 type PostReceptionsJSONBody struct {
-	PvzId openapi_types.UUID `json:"pvzId"`
+	PvzId uuid.UUID `json:"pvzId"`
 }
 
 // PostRegisterJSONBody defines parameters for PostRegister.
@@ -212,10 +213,10 @@ type ServerInterface interface {
 	PostPvz(c *gin.Context)
 	// Закрытие последней открытой приемки товаров в рамках ПВЗ
 	// (POST /pvz/{pvzId}/close_last_reception)
-	PostPvzPvzIdCloseLastReception(c *gin.Context, pvzId openapi_types.UUID)
+	PostPvzPvzIdCloseLastReception(c *gin.Context, pvzId uuid.UUID)
 	// Удаление последнего добавленного товара из текущей приемки (LIFO, только для сотрудников ПВЗ)
 	// (POST /pvz/{pvzId}/delete_last_product)
-	PostPvzPvzIdDeleteLastProduct(c *gin.Context, pvzId openapi_types.UUID)
+	PostPvzPvzIdDeleteLastProduct(c *gin.Context, pvzId uuid.UUID)
 	// Создание новой приемки товаров (только для сотрудников ПВЗ)
 	// (POST /receptions)
 	PostReceptions(c *gin.Context)
@@ -347,7 +348,7 @@ func (siw *ServerInterfaceWrapper) PostPvzPvzIdCloseLastReception(c *gin.Context
 	var err error
 
 	// ------------- Path parameter "pvzId" -------------
-	var pvzId openapi_types.UUID
+	var pvzId uuid.UUID
 
 	err = runtime.BindStyledParameterWithOptions("simple", "pvzId", c.Param("pvzId"), &pvzId, runtime.BindStyledParameterOptions{Explode: false, Required: true})
 	if err != nil {
@@ -373,7 +374,7 @@ func (siw *ServerInterfaceWrapper) PostPvzPvzIdDeleteLastProduct(c *gin.Context)
 	var err error
 
 	// ------------- Path parameter "pvzId" -------------
-	var pvzId openapi_types.UUID
+	var pvzId uuid.UUID
 
 	err = runtime.BindStyledParameterWithOptions("simple", "pvzId", c.Param("pvzId"), &pvzId, runtime.BindStyledParameterOptions{Explode: false, Required: true})
 	if err != nil {
@@ -605,7 +606,7 @@ func (response PostPvz403JSONResponse) VisitPostPvzResponse(w http.ResponseWrite
 }
 
 type PostPvzPvzIdCloseLastReceptionRequestObject struct {
-	PvzId openapi_types.UUID `json:"pvzId"`
+	PvzId uuid.UUID `json:"pvzId"`
 }
 
 type PostPvzPvzIdCloseLastReceptionResponseObject interface {
@@ -640,7 +641,7 @@ func (response PostPvzPvzIdCloseLastReception403JSONResponse) VisitPostPvzPvzIdC
 }
 
 type PostPvzPvzIdDeleteLastProductRequestObject struct {
-	PvzId openapi_types.UUID `json:"pvzId"`
+	PvzId uuid.UUID `json:"pvzId"`
 }
 
 type PostPvzPvzIdDeleteLastProductResponseObject interface {
@@ -937,7 +938,7 @@ func (sh *strictHandler) PostPvz(ctx *gin.Context) {
 }
 
 // PostPvzPvzIdCloseLastReception operation middleware
-func (sh *strictHandler) PostPvzPvzIdCloseLastReception(ctx *gin.Context, pvzId openapi_types.UUID) {
+func (sh *strictHandler) PostPvzPvzIdCloseLastReception(ctx *gin.Context, pvzId uuid.UUID) {
 	var request PostPvzPvzIdCloseLastReceptionRequestObject
 
 	request.PvzId = pvzId
@@ -964,7 +965,7 @@ func (sh *strictHandler) PostPvzPvzIdCloseLastReception(ctx *gin.Context, pvzId 
 }
 
 // PostPvzPvzIdDeleteLastProduct operation middleware
-func (sh *strictHandler) PostPvzPvzIdDeleteLastProduct(ctx *gin.Context, pvzId openapi_types.UUID) {
+func (sh *strictHandler) PostPvzPvzIdDeleteLastProduct(ctx *gin.Context, pvzId uuid.UUID) {
 	var request PostPvzPvzIdDeleteLastProductRequestObject
 
 	request.PvzId = pvzId
@@ -1059,34 +1060,36 @@ func (sh *strictHandler) PostRegister(ctx *gin.Context) {
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
+	"X6pvvfiI6zJ3KfX6/wMAAP//gaa8Lv4lAAA=",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
