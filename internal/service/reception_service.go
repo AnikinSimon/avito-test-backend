@@ -8,6 +8,7 @@ import (
 	"errors"
 	"github.com/AnikinSimon/avito-test-backend/internal/models/dto/request"
 	"github.com/AnikinSimon/avito-test-backend/internal/models/entity"
+	"github.com/AnikinSimon/avito-test-backend/internal/pkg/metrics"
 	apperror "github.com/AnikinSimon/avito-test-backend/internal/pkg/web/errors"
 	"github.com/AnikinSimon/avito-test-backend/internal/repository"
 
@@ -136,6 +137,7 @@ func (s *ReceptionServiceImpl) DeleteLastProduct(ctx context.Context, pvzID uuid
 		}
 	}
 
+	tx.Commit()
 	return nil
 }
 
@@ -174,6 +176,7 @@ func (s *ReceptionServiceImpl) CreateReception(ctx context.Context, req *request
 	}
 
 	tx.Commit()
+	metrics.CreateReception()
 	return reception, nil
 }
 
@@ -205,5 +208,6 @@ func (s *ReceptionServiceImpl) AddProductToReception(ctx context.Context, req *r
 	}
 
 	tx.Commit()
+	metrics.AddProduct()
 	return res, nil
 }

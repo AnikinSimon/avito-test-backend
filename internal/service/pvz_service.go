@@ -7,6 +7,7 @@ import (
 	"errors"
 	"github.com/AnikinSimon/avito-test-backend/internal/models/dto/request"
 	"github.com/AnikinSimon/avito-test-backend/internal/models/entity"
+	"github.com/AnikinSimon/avito-test-backend/internal/pkg/metrics"
 	apperror "github.com/AnikinSimon/avito-test-backend/internal/pkg/web/errors"
 	"github.com/AnikinSimon/avito-test-backend/internal/repository"
 )
@@ -46,5 +47,6 @@ func (s *PvzServiceImpl) CreatePvz(ctx context.Context, req *request.CreatePvz) 
 		}
 	}
 
+	metrics.CreatePVZ()
 	return resp, err
 }
