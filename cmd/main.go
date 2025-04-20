@@ -18,7 +18,7 @@ import (
 )
 
 var (
-	cfgPath = flag.String("f", "configs/config.yaml", "path to the go's config")
+	cfgPath = flag.String("f", "configs/config.yaml", "path to the app's config")
 	useGrpc = flag.Bool("g", true, "use grpc server?")
 )
 
