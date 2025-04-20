@@ -3,10 +3,18 @@ package main
 import (
 	"context"
 	"flag"
+	"github.com/AnikinSimon/avito-test-backend/internal/config"
+	pvzv1 "github.com/AnikinSimon/avito-test-backend/internal/grpc/pvz/v1"
+	"github.com/AnikinSimon/avito-test-backend/internal/httpserver"
+	"github.com/AnikinSimon/avito-test-backend/internal/pkg/metrics"
+	"github.com/AnikinSimon/avito-test-backend/internal/repository"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
+
+	_ "github.com/lib/pq"
+	"google.golang.org/grpc"
 )
 
 var (
