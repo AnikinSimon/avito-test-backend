@@ -18,3 +18,15 @@ gen-proto:
 		--go_opt=paths=source_relative \
 		--go-grpc_opt=paths=source_relative \
 		$(PROTO_DIR)/pvz.proto
+
+sqlc:
+	sqlc generate -f ./database/sqlc.yaml
+
+gogen:
+	go generate ./...
+
+up:
+	docker compose up -d --build
+
+stop:
+	docker compose stop
