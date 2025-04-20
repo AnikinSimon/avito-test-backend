@@ -50,7 +50,7 @@ services:
     networks:
       - backend-net
     volumes:
-      - ./db/migrations/:/migrations
+      - ./database/migrations/:/migrations
     command: ["-path", "/migrations", "-database", "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD:-invalid}@postgres:5432/${POSTGRES_DB}?sslmode=disable", "up"]
     links:
       - postgres

@@ -25,7 +25,7 @@ sqlc:
 gogen:
 	go generate ./...
 
-up:
+run:
 	docker compose up -d --build
 
 stop:
